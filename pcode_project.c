@@ -11,7 +11,10 @@
     static int enemy_atk = 5;
 
     //method prototypes
-    void basic_enemy(int monster_level);
+    void displayStatusOfAll();
+    void playerActs();
+    void enemyDies();
+    void enemyAttacks();
 
 int main(void)
 {
