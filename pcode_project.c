@@ -2,24 +2,26 @@
 
     //player starting stats
     static int player_hp = 10;
-    static int player_atk = 3;
+    static int player_max_hp = 10;
+    static int player_atk = 4;
     static int player_lvl = 1;  //is equivalent to count to monsters encountered
     static int player_is_blocking = 1; // 1 = not blocking, 2 = blocking
 
     //enemy starting stats
-    static int enemy_hp = 5;
-    static int enemy_atk = 5;
+    static int enemy_hp = 2;
+    static int enemy_atk = 1;
 
     //method prototypes
     void displayStatusOfAll();
     void playerActs();
     void enemyDies();
     void enemyAttacks();
+    void endOfCombatSelection();
 
 int main(void)
 {
 
-    printf("You are approached by a monster\n");//, array_monster_name[lvl]);
+    printf("You are approached by a monster!\n");//, array_monster_name[lvl]);
 
 
     //each while loop represents one round of combat between player and the current enemy
@@ -29,7 +31,7 @@ int main(void)
         displayStatusOfAll();
         playerActs();
 
-        if (enemy_hp < 0)
+        if (enemy_hp <= 0)
             enemyDies();
         else
             enemyAttacks();
@@ -38,15 +40,16 @@ int main(void)
 
     } while (player_hp > 0);
 
-    printf("You have died to the monster\n");//, array_monster_name[lvl]);
+    printf("You have died to the monster...\n");//, array_monster_name[lvl]);
 
 }
 
 void displayStatusOfAll() {
 
     printf("\n------------A new round of combat begins------------");
-    printf("\nPlayer:\n hp: %d\n attack: %d\n level: %d\n", player_hp, player_atk, player_lvl);
-    printf("\nEnemy:\n hp: %d\n attack: %d\n\n\n", enemy_hp, enemy_atk);
+    printf("\nPlayer:\n hp: %d/%d\n attack: %d\n level: %d\n", player_hp, player_max_hp, player_atk, player_lvl);
+    printf("\nEnemy:\n hp: %d\n attack: %d\n", enemy_hp, enemy_atk);
+    printf("-----------------------------------------------------\n\n");
 
 }
 
@@ -55,18 +58,28 @@ void playerActs() {
     int userActionID;   //stores value of what player plans to do
 
     //Get user plan of action
-    printf("Enter your action: [1] = attack, [2] = block\n");
+    printf("---Enter your action: [1] = attack(deal full attack), [2] = defensive charge(deal half and receive half damage)\n");
     scanf("%d", &userActionID);
 
     if (userActionID == 1)
     {
         enemy_hp -= player_atk; // player attacks
-        printf("\nYou deal %d damage to the monster\n", player_atk);
+        printf("\n--You deal %d damage to the monster\n", player_atk);
     }
 
+    //When blocking, user deals half damage and recieves half damage
     else if (userActionID == 2)
     {
+        enemy_hp -= (player_atk/2);
+            printf("\n--You deal %d damage to the monster\n", player_atk/2);
         player_is_blocking = 2;
+    }
+
+    else
+    {
+
+        printf("--You stumble and fail to decide a correct action\n");
+
     }
 
     return player_is_blocking;
@@ -78,7 +91,7 @@ void playerActs() {
 void enemyAttacks() {
 
     player_hp -= (enemy_atk / player_is_blocking); // player takes damage from monster
-    printf("You take %d damage from the monster\n", (enemy_atk / player_is_blocking));
+    printf("--You take %d damage from the monster\n", (enemy_atk / player_is_blocking));
     player_is_blocking = 1;
 
 }
@@ -86,12 +99,47 @@ void enemyAttacks() {
 //When player dies, player gains a level and a new monster appears
 void enemyDies() {
 
-    printf("You have slain the enemy and a new one approaches in it's place\n");//, array_monster_name[lvl]);
+    printf("---------You have slain the enemy!\n\n");
     player_lvl++;
 
-    enemy_hp = 5;
-    enemy_atk = 5;
+    endOfCombatSelection();
 
+    //Set enemy stats to arbitrary values
+    enemy_hp = player_lvl*2;
+    enemy_atk = player_lvl;
+
+    printf("---------A new enemy appears before you!\n");
+}
+
+//Player gets to choose out of three options after slaying the enemy
+void endOfCombatSelection() {
+
+    int userActionID = 0;
+    printf("---Enter your action: [1] = rest (restore to full hp), [2] = train muscles(increase attack by one), [3] = train body(increase max health by two)\n");
+    scanf("%d", &userActionID);
+
+    if (userActionID == 1)
+    {
+        player_hp = player_max_hp;
+        printf("--You feel well rested\n");
+    }
+
+    else if (userActionID == 2)
+    {
+        player_atk++;
+        printf("--Your muscles grow stronger\n");
+    }
+
+    else if (userActionID == 3)
+    {
+        player_max_hp+=2;
+        printf("--Your body feels sturdier\n");
+    }
+
+    else
+    {
+        printf("--You don't stop and start running deeper\n");
+    }
 }
 
 /*
