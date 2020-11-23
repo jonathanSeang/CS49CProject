@@ -1,12 +1,12 @@
 #include <stdio.h>
 
     //player starting stats
-    static int player_hp = 10;
-    static int player_max_hp = 10;
-    static int player_atk = 4;
+    static int player_hp = 10;  // current hp
+    static int player_max_hp = 10;  // max hp, so player_hp cannot go above this
+    static int player_atk = 4;  // how much damage the player does to the monster
     static int player_lvl = 1;  //is equivalent to count to monsters encountered
     static int player_is_blocking = 1; // 1 = not blocking, 2 = blocking
-    static int player_shield_lvl = 1; // 1
+    static int player_shield_lvl = 1; // affects how much damage the player takes
 
     //enemy starting stats
     static int enemy_hp = 2;
@@ -23,7 +23,7 @@
 int main(void)
 {
         // array for monster names
-        const char* a[11] = {
+        const char* a[11] = { // 11 elements since 0 is the start
             a[0] = "nothing", // player level starts at 1 so you never fight an enemy at index 0
             a[1] = "rat",
             a[2] = "boar",
@@ -60,10 +60,10 @@ int main(void)
     }
     else
         printf("Congratulations, Hero!!");
-    return 0;
+    return 0; // program ends
 }
 
-void displayStatusOfAll() {
+void displayStatusOfAll() { // shows the current hp and attack of player and enemy
 
     printf("\n------------A new round of combat begins------------");
     printf("\nPlayer:\n hp: %d/%d\n attack: %d\n level: %d\n", player_hp, player_max_hp, player_atk, player_lvl);
@@ -72,7 +72,7 @@ void displayStatusOfAll() {
 
 }
 
-void playerActs() {
+void playerActs() { 
 
     int userActionID;   //stores value of what player plans to do
 
@@ -94,7 +94,7 @@ void playerActs() {
         player_is_blocking = 2;
     }
 
-    else
+    else // edge case if the user doesn't input 1 or 2
     {
 
         printf("--You stumble and fail to decide a correct action\n");
@@ -104,17 +104,16 @@ void playerActs() {
 
 }
 
-//Will reduce player health depending on enemy attack damage and if player is attacking
-//input: if enemy is blocking
+//Will reduce player health depending on enemy attack damage and if player is blocking
 void enemyAttacks() {
 
     player_hp -= (enemy_atk / (player_is_blocking * player_shield_lvl)); // player takes damage from monster based on the level of their shield and if they are blocking
     printf("--You take %d damage from the monster\n", (enemy_atk / (player_is_blocking * player_shield_lvl)));
-    player_is_blocking = 1;
+    player_is_blocking = 1; // reset blocking to default value
 
 }
 
-//When player dies, player gains a level and a new monster appears
+//When player dies, player gains a level
 void enemyDies() {
 
     printf("---------You have slain the enemy!\n\n");
@@ -126,7 +125,7 @@ void enemyDies() {
     enemy_hp = player_lvl*3;
     enemy_atk = player_lvl*2;
 
-    if (player_lvl % 3 == 0)
+    if (player_lvl % 3 == 0) // every third level, the player can go to town 
         goTown();
 }
 
@@ -156,7 +155,7 @@ void endOfCombatSelection() {
         printf("--Your body feels sturdier\n");
     }
 
-    else
+    else // edge case where user doesn't input 1, 2 or 3
     {
         printf("--You don't stop and start running deeper\n");
     }
@@ -181,7 +180,7 @@ void goTown() {
         printf("\n--You purchase a better shield.\n");
     }
 
-    else
+    else // edge case where player doesn't pick 1 or 2
     {
 
         printf("--You decide to leave without purchasing anything\n");
