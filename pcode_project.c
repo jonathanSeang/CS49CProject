@@ -56,10 +56,10 @@ int main(void)
 
     if (player_hp <= 0){
         printf("You have died to the %s...\n", a[player_lvl]);
-        printf("You died at level %d. Try to make it to level 10 next time! \n", player_lvl);
+        printf("You died at level %d. Try to make it to level 11 next time! \n", player_lvl);
     }
     else
-        printf("You Win, Congrats");
+        printf("Congratulations, Hero!!");
     return 0;
 }
 
